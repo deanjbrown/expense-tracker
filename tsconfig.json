@@ -1,4 +1,11 @@
 {
+  "compilerOptions": {
+    // Resolve ShadCN paths:
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
   "files": [],
   "references": [
     {
