@@ -29,13 +29,13 @@ const Navbar = () => {
           <div className="hidden md:flex flex-grow space-x-4">
             <a
               href="#"
-              className="text-foreground hover:text-primary transition-colors duration-400"
+              className="text-foreground/70 hover:text-foreground transition-colors duration-300"
             >
               Home
             </a>
             <a
               href="#"
-              className="text-foreground hover:hover:text-primary transition-colors duration-400"
+              className="text-foreground/70 hover:text-foreground transition-colors duration-300"
             >
               New Expense
             </a>
@@ -45,8 +45,8 @@ const Navbar = () => {
               <DropdownMenuTrigger>
                 <Avatar>
                   <AvatarImage src="#" />
-                  <AvatarFallback className="bg-background hover:bg-foreground transition-colors duration-1000">
-                    <User className="text-foreground hover:text-background transition-colors duration-1000" />
+                  <AvatarFallback>
+                    <User className="text-foreground/70 hover:text-foreground transition-colors duration-300" />
                   </AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
