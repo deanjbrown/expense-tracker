@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +11,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Menu, User } from "lucide-react";
 
-const Navbar = () => {
+interface NavbarProps {
+  handleNewExpenseClicked: () => void;
+}
+
+const Navbar = (props: NavbarProps) => {
   const [isMobileMenuVisible, setIsMobileMenuVisible] =
     useState<boolean>(false);
 
@@ -36,6 +40,7 @@ const Navbar = () => {
             <a
               href="#"
               className="text-foreground/70 hover:text-foreground transition-colors duration-300"
+              onClick={props.handleNewExpenseClicked}
             >
               New Expense
             </a>
