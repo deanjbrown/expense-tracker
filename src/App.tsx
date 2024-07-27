@@ -64,7 +64,7 @@ function App() {
   return (
     <>
       <Navbar handleNewExpenseClicked={handleNewExpenseClicked} />
-      <main className="container mt-8">
+      <main className="container mx-auto my-8">
         <NewExpense
           isOpen={isNewExpenseVisible}
           onClose={closeNewExpenseDialog}

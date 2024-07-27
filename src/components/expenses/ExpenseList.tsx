@@ -1,4 +1,5 @@
-import ExpenseItem from "./ExpenseItem";
+import columns from "./data-table/columns";
+import DataTable from "./data-table/data-table";
 
 interface ExpenseListProps {
   expenses: Expense[];
@@ -7,17 +8,9 @@ interface ExpenseListProps {
 function ExpenseList(props: ExpenseListProps) {
   return (
     <>
-      {props.expenses.map((expense: Expense) => (
-        <ExpenseItem
-          key={expense.id}
-          expenseName={expense.expenseName}
-          expenseAmount={expense.expenseAmount}
-          expenseFrequency={expense.expenseFrequency}
-          expenseDate={expense.expenseDate}
-        />
-      ))}
+      <DataTable columns={columns} data={props.expenses}/>
     </>
-  );
+  )
 }
 
 export default ExpenseList;
