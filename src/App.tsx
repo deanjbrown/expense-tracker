@@ -9,21 +9,21 @@ const TEST_EXPENSES: Expense[] = [
     expenseName: "Car Insuance",
     expenseAmount: 128.53,
     expenseFrequency: "yearly",
-    expenseDate: new Date(2023, 5, 15),
+    expenseDate: new Date(2024, 6, 1),
   },
   {
     id: 2,
     expenseName: "Electricity Bill",
     expenseAmount: 120.0,
     expenseFrequency: "monthly",
-    expenseDate: new Date(2023, 5, 17),
+    expenseDate: new Date(2024, 6, 15),
   },
   {
     id: 3,
     expenseName: "Shopping Bill",
     expenseAmount: 75.0,
     expenseFrequency: "weekly",
-    expenseDate: new Date(2023, 5, 1),
+    expenseDate: new Date(2024, 6, 17),
   },
   {
     id: 4,
@@ -31,14 +31,14 @@ const TEST_EXPENSES: Expense[] = [
     expenseAmount: 7.20,
     expenseFrequency: "everyxdays",
     expenseXDays: 3,
-    expenseDate: new Date(2023, 2, 1),
+    expenseDate: new Date(2024, 6, 5),
   },
   {
     id: 5,
     expenseName: "Internet Bill",
     expenseAmount: 45.0,
     expenseFrequency: "monthly",
-    expenseDate: new Date(2023, 4, 5),
+    expenseDate: new Date(2024, 6, 25),
   },
 ];
 

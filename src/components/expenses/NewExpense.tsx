@@ -65,7 +65,6 @@ function NewExpense(props: NewExpenseProps) {
     props.onSave(newExpense);
   };
 
-
   // TODO => We need to make all of the inputs required. The required keyword does not seem to work by itself
   return (
     <>
@@ -137,7 +136,8 @@ function NewExpense(props: NewExpenseProps) {
             </div>
 
             <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="freqSingleDate" className="text-right">
+              {/* TODO This Label isn't correctly set to the popover */}
+              <Label htmlFor="newExpenseDatePicker" className="text-right">
                 {expenseFrequency === "single" && "Expense Date"}
                 {expenseFrequency !== "single" && "Start Date"}
               </Label>
@@ -147,6 +147,7 @@ function NewExpense(props: NewExpenseProps) {
                   className="bg-gray-300 hover:bg-gray-300"
                 >
                   <Button
+                    id="newExpenseDatePicker"
                     variant={"outline"}
                     className={cn(
                       "col-span-3 justify-start text-left font-normal",
