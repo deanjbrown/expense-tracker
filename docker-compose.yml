@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+  nodeserver:
+    restart: always
+    build:
+      context: ./backend
+    ports:
+      - 3000:3000
+    develop:
+      watch:
+        - action: sync
+          path: ./backend
+          target: /usr/src/app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
+    env_file: ./backend/.env
+    environment:
+      - PORT
+      - DATABASE_URL
+      - JWT_SECRET
+
+  nginxreverseproxy:
+    restart: always
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+
+
