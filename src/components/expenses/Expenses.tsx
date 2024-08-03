@@ -28,18 +28,20 @@ function Expenses(props: ExpensesProps) {
     console.log(`dateTo: ${dateTo}`);
 
     // Filter the expenses between the date range
-    const filtered: Expense[] = props.expenses.filter(
-      (expense: Expense) => {
-        return expense.expenseDate >= dateFrom && expense.expenseDate <= dateTo;
-      }
-    );
+    const filtered: Expense[] = props.expenses.filter((expense: Expense) => {
+      return expense.expenseDate >= dateFrom && expense.expenseDate <= dateTo;
+    });
 
     setFilteredExpenses(filtered);
   }, [dateRange, props.expenses]);
 
   return (
     <>
-      <DatePickerWithRange dateRange={dateRange} setDateRange={setDateRange} onFilterExpensesClicked={filterExpenses} />
+      <DatePickerWithRange
+        dateRange={dateRange}
+        setDateRange={setDateRange}
+        onFilterExpensesClicked={filterExpenses}
+      />
       <ExpenseList expenses={filteredExpenses} />
     </>
   );
