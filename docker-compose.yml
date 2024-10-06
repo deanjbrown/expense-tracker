@@ -17,9 +17,27 @@ services:
           path: package.json
     env_file: ./backend/.env
     environment:
-      - PORT
-      - DATABASE_URL
-      - JWT_SECRET
+      - PORT=${POST}
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DATABASE_URL=${DATABASE_URL}
+
+  db:
+    restart: always
+    build:
+      context: ./database
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./database/.env
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - db-data:/var/lib/postgresql/data
 
   nginxreverseproxy:
     restart: always
@@ -27,5 +45,3 @@ services:
       context: ./nginx
     ports:
       - "80:80"
-
-
