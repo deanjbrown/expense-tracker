@@ -2,20 +2,28 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "Backend for Expense Tracker",
-  "main": "src/app.ts",
+  "main": "app.ts",
   "author": "Dean Brown",
   "license": "MIT",
   "scripts": {
     "build": "npx tsc",
-    "start": "node src/dist/app.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q src/dist/app.js\""
+    "start": "node dist/app.js",
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/app.js\"",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx db/migrate.ts",
+    "db:update": "yarn db:generate && yarn db:migrate"
   },
   "dependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "drizzle-orm": "^0.33.0",
     "drizzle-zod": "^0.5.1",
     "express": "^4.19.2",
-    "pg": "^8.13.0"
+    "passport": "^0.7.0",
+    "passport-local": "^1.0.0",
+    "pg": "^8.13.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",

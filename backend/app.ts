@@ -1,5 +1,7 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express } from "express";
 import cors, { CorsOptions } from "cors";
+import accountRoutes from "./routes/accountRoutes";
+import expenseRoutes from "./routes/expenseRoutes";
 
 // Create the app and set the port
 const port: string | undefined = process.env.PORT;
@@ -16,13 +18,13 @@ const options: CorsOptions = {
   origin: allowedOrigins,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
 };
-
 app.use(cors(options));
 
-// Create a test route
-app.get("/", async (req: Request, res: Response) => {
-  res.status(200).send({ message: "Hello World" });
-});
+// Define routes
+app.use("/api/account", accountRoutes);
+app.use("/api/expenses", expenseRoutes);
+
+console.log(process.env.DATABASE_URL as string)
 
 // Start the application
 app.listen(port, () => {

@@ -1,5 +1,5 @@
 ###
-# Backend Dockerfile
+# Frontend Dockerfile
 ###
 
 # pull the Node.js Docker image
@@ -18,6 +18,7 @@ RUN yarn install
 COPY . .
 
 # our app is running on port 5000 within the container, so need to expose it
-EXPOSE 3000
+EXPOSE 8080
 
-CMD ["yarn", "dev"]
+# run our application in dev mode
+CMD [ "yarn", "dev" ]

@@ -128,7 +128,7 @@ function NewExpense(props: NewExpenseProps) {
                   <SelectItem value="everyxdays">Every X Days</SelectItem>
                   <SelectItem value="daily">Daily</SelectItem>
                   <SelectItem value="weekly">Weekly </SelectItem>
-                  <SelectItem value="foretnightly">Fortnightly</SelectItem>
+                  <SelectItem value="fortnightly">Fortnightly</SelectItem>
                   <SelectItem value="monthly">Monthly</SelectItem>
                   <SelectItem value="yearly">Yearly</SelectItem>
                 </SelectContent>

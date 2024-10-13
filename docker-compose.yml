@@ -1,4 +1,3 @@
-version: "3.8"
 services:
   nodeserver:
     restart: always
@@ -17,12 +16,12 @@ services:
           path: package.json
     env_file: ./backend/.env
     environment:
-      - PORT=${POST}
-      - DB_HOST=${DB_HOST}
-      - DB_USER=${DB_USER}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_NAME=${DB_NAME}
-      - DATABASE_URL=${DATABASE_URL}
+      - PORT
+      - DB_HOST
+      - DB_USER
+      - DB_PASSWORD
+      - DB_NAME
+      - DATABASE_URL
 
   db:
     restart: always
@@ -33,11 +32,27 @@ services:
     env_file:
       - ./database/.env
     environment:
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
     volumes:
       - db-data:/var/lib/postgresql/data
+
+  reactserver:
+    restart: always
+    build:
+      context: ./frontend
+    ports:
+      - "8080:8080"
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend
+          target: /usr/src/app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: package.json
 
   nginxreverseproxy:
     restart: always
@@ -45,3 +60,9 @@ services:
       context: ./nginx
     ports:
       - "80:80"
+    depends_on:
+      - nodeserver
+      - reactserver
+
+volumes:
+  db-data:

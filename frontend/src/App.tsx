@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "./components/navigation/Navbar";
 import NewExpense from "./components/expenses/NewExpense";
 import Expenses from "./components/expenses/Expenses";
+
+import axios from "axios";
 
 const TEST_EXPENSES: Expense[] = [
   {
@@ -28,7 +30,7 @@ const TEST_EXPENSES: Expense[] = [
   {
     id: 4,
     expenseName: "Lunch",
-    expenseAmount: 7.20,
+    expenseAmount: 7.2,
     expenseFrequency: "everyxdays",
     expenseXDays: 3,
     expenseDate: new Date(2024, 6, 5),
@@ -43,6 +45,27 @@ const TEST_EXPENSES: Expense[] = [
 ];
 
 function App() {
+  useEffect(() => {
+    // Try to get a list of expeneses from the server
+    const getExpenses = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost/api/expenses/",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json"
+            }
+          }
+        );
+        console.log(`[+] Response: ${JSON.stringify(response)}`);
+      }catch(error) {
+        console.log(`[-] Error: ${error}`);
+      }
+    } 
+    getExpenses();
+  }, []);
+
   const [expenses, setExpenses] = useState<Expense[]>(TEST_EXPENSES);
   const [isNewExpenseVisible, setIsNewExpenseDialogVisible] =
     useState<boolean>(false);
