@@ -3,7 +3,7 @@
 ###
 
 # pull the Node.js Docker image
-FROM node:alpine
+FROM node:lts-alpine
 
 # create the directory inside the container
 WORKDIR /usr/src/app

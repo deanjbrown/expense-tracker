@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
 import Navbar from "./components/navigation/Navbar";
 import NewExpense from "./components/expenses/NewExpense";
 import Expenses from "./components/expenses/Expenses";
-
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 const TEST_EXPENSES: Expense[] = [

@@ -36,9 +36,11 @@ export const expense = pgTable("expense", {
   }).notNull(),
   expenseFrequency: expenseFrequencyEnum("expense_frequency").notNull(),
   expenseXDays: integer("expense_x_days"),
-  expenseDate: timestamp("expense_date", { mode: "string" }).notNull().defaultNow(),
-  createdAt: timestamp("created_at", { mode: "string" }).notNull().defaultNow(),
-  updatedAt: timestamp("updated_at", { mode: "string" }).notNull().defaultNow(),
+  expenseDate: timestamp("expense_date", { mode: "date" })
+    .notNull()
+    .defaultNow(),
+  createdAt: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
+  updatedAt: timestamp("updated_at", { mode: "date" }).notNull().defaultNow(),
 });
 
 // Define the models relations
@@ -68,14 +70,14 @@ export const expenseBaseSchema = createInsertSchema(expense, {
   expenseAmount: (schema) => schema.expenseAmount.min(1),
   expenseFrequency: () => expenseFrequencyEnumSchema,
   expenseXDays: (schema) => schema.expenseXDays.min(1).positive(),
-  expenseDate: (schema) => schema.expenseDate.min(1)
+  expenseDate: (schema) => schema.expenseDate, //.min(1) // TODO => We definitely need to check our validations more.
 }).pick({
   createdById: true,
   expenseName: true,
   expenseAmount: true,
   expenseFrequency: true,
   expenseXDays: true,
-  expenseDate: true
+  expenseDate: true,
 });
 
 // Expense schema can have 2 validation modes (Create and Edit)
@@ -87,7 +89,7 @@ export const expenseZodSchema = z.union([
     expenseAmount: expenseBaseSchema.shape.expenseAmount,
     expenseFrequency: expenseBaseSchema.shape.expenseFrequency,
     expenseXDays: expenseBaseSchema.shape.expenseXDays,
-    expenseDate: expenseBaseSchema.shape.expenseDate
+    expenseDate: expenseBaseSchema.shape.expenseDate,
   }),
   z.object({
     mode: z.literal("update"),
@@ -97,7 +99,7 @@ export const expenseZodSchema = z.union([
     expenseAmount: expenseBaseSchema.shape.expenseAmount,
     expenseFrequency: expenseBaseSchema.shape.expenseFrequency,
     expenseXDays: expenseBaseSchema.shape.expenseXDays,
-    expenseDate: expenseBaseSchema.shape.expenseDate
+    expenseDate: expenseBaseSchema.shape.expenseDate,
   }),
 ]);
 

@@ -1,3 +1,11 @@
+/**
+ *
+ *
+ * TODO => None of this is currently being used as we have switched to drizzle zod.
+ * But all of these checks need to be reimplemented in drizzle-zod.
+ *
+ */
+
 import * as bcrypt from "bcrypt";
 
 export interface InputValidationResult {

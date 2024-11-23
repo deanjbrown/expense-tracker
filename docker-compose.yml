@@ -64,5 +64,23 @@ services:
       - nodeserver
       - reactserver
 
+  devadminer:
+    restart: always
+    image: adminer:latest
+    container_name: devadminer
+    ports:
+      - "8081:8081"
+    command:
+      [
+        "php",
+        "-S",
+        "0.0.0.0:8081",
+        "-t",
+        "/var/www/html",
+        "/var/www/html/index.php",
+      ]
+    depends_on:
+      - db
+
 volumes:
   db-data:
