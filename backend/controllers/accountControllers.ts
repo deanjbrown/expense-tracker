@@ -10,7 +10,6 @@ import {
   verifyEmailService,
 } from "../services/accountServices";
 
-
 // TODO => Need to refactor this into a service
 const loginController = async (
   req: Request,
@@ -21,22 +20,34 @@ const loginController = async (
     "local",
     (err: Error, user: SelectUserModel | false, info: any) => {
       if (err) {
+        console.log(
+          `[-] LOGINCONTROLLER - Error during authentication: ${err}`
+        );
         return next(err);
       }
       if (!user) {
+        console.log(
+          `[-] LOGINCONTROLLER - Authentication failed: ${info.message}`
+        );
         return res.status(401).json({ message: info.message });
       }
 
+      console.log("[+] LOGINCONTROLLER - Attempting to log the user in");
       // Log in the user and create a session
       req.login(user, (loginErr) => {
         if (loginErr) {
+          console.log(
+            `[-] LOGINCONTROLLER - There has been a login issue:\n${loginErr}`
+          );
           return next(loginErr);
+        } else {
+          console.log(
+            `LOGINCONTROLLER - There has been no login error and we have reached the end....`
+          );
         }
 
         // Successfully logged in
-        return res
-          .status(200)
-          .json({ message: `Logged in successfully: ${JSON.stringify(user)}` });
+        return res.status(200).json({ message: "Logged in successfully" });
       });
     }
   )(req, res, next);
@@ -66,11 +77,8 @@ const registerController = async (req: Request, res: Response) => {
   // TODO => This try catch should be moved into the service
   try {
     console.log(`Entered the registerController()`);
-    console.log(`Body: ${JSON.stringify(req.body)}`);
     // Create the user
     const validatedData = userSchema.parse(req.body);
-    console.log(`validatedData: ${JSON.stringify(validatedData)}`);
-
     const createdUser = await registerUserService(validatedData);
     if (!createdUser) throw new Error("Could not create a user.");
 
@@ -82,7 +90,8 @@ const registerController = async (req: Request, res: Response) => {
       throw new Error("Could not create a verificationCode");
 
     // TODO => If the email is not sent, we should do some error handling here.
-    const isEmailSent = sendVerificationEmailService(
+    // TODO => Does this even need to be async???
+    const isEmailSent = await sendVerificationEmailService(
       createdUser.email,
       createdVerificationCodeId.verificationCode
     );
@@ -114,9 +123,26 @@ const verifyEmailController = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ *
+ * @param req
+ * @param res
+ *
+ * Checks if the user is authenticated. If they are, it returns the user.
+ */
+const userDetailController = async (req: Request, res: Response) => {
+  // TODO => Move this into a service
+  if (req.isAuthenticated()) {
+    res.status(200).json({ user: req.user });
+  } else {
+    res.status(401).json({ message: "Not authenticated" });
+  }
+};
+
 export {
   loginController,
   logoutController,
   registerController,
   verifyEmailController,
+  userDetailController,
 };

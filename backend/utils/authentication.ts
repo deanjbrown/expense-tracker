@@ -14,7 +14,6 @@ const generateUnique32ByteKey = () => {
 
 const configurePassport = () => {
   // Serialize a user
-  // TODO => We shouldn't be pulling the entire user!!
   passport.serializeUser((user: SelectUserModel, done) => {
     done(null, user.id);
   });
@@ -41,29 +40,36 @@ const configurePassport = () => {
       { usernameField: "email" },
       async (email: string, password: string, done) => {
         try {
-          const userRow = await db
+          const [retrievedUser] = await db
             .select()
             .from(user)
-            .where(eq(user.email, email))
-            .execute()
-            .then((res) => res[0] as SelectUserModel | undefined);
+            .where(eq(user.email, email));
 
-          // Check that the user exists
-          if (!userRow) {
-            console.log("[-] userRow does not exist");
+          console.log(
+            `[+] PASSPORT - Retrieved user: ${JSON.stringify(retrievedUser)}`
+          );
+
+          if (!retrievedUser) {
+            console.log(`[-] Could not retrieve a user.`);
             return done(null, false, {
               message: "Incorrect email or password",
             });
           }
 
           // Check that the password sent matches the hashed password
-          const isMatch = await bcrypt.compare(password, userRow.password);
+          const isMatch = await bcrypt.compare(
+            password,
+            retrievedUser.password
+          );
           if (!isMatch) {
             return done(null, false, {
               message: "Incorrect email or password",
             });
           }
-          return done(null, userRow);
+          console.log(
+            `[+] PASSPORT - Reached the end. Returning the user to done.`
+          );
+          return done(null, retrievedUser);
         } catch (error) {
           return done(error);
         }

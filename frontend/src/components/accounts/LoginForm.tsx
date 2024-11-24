@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import {
   Form,
   FormControl,
@@ -13,14 +12,17 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import SocialLogins from "./SocialLogins";
-import { toast } from "@/hooks/use-toast";
 
 const LoginFormSchema = z.object({
   email: z.string().min(2).max(50),
   password: z.string().min(2).max(50),
 });
 
-const LoginForm = () => {
+type LoginFormProps = {
+  onLogin: (values: z.infer<typeof LoginFormSchema>) => Promise<void>;
+};
+
+const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const loginForm = useForm<z.infer<typeof LoginFormSchema>>({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
@@ -29,22 +31,10 @@ const LoginForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof LoginFormSchema>) {
-    console.log(values);
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      ),
-    });
-  }
-
   return (
     <>
       <Form {...loginForm}>
-        <form onSubmit={loginForm.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={loginForm.handleSubmit(onLogin)} className="space-y-6">
           <FormField
             control={loginForm.control}
             name="email"

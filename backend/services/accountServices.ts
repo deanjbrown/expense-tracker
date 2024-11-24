@@ -91,7 +91,7 @@ export const createVerificationCodeService = async (
   userId: number
 ): Promise<VerificationCodeZodSelectSchema | null> => {
   // Generate the verification code string
-  const verificationCodeString = generateVerificationCodeString();
+  const verificationCodeString = await generateVerificationCodeString();
 
   // Verify our data
   const validatedData = verificationCodeSchema.parse({

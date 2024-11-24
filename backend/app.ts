@@ -15,9 +15,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Enable cors
-const allowedOrigins: string[] = ["http://localhost", "http://127.0.0.1"];
+const allowedOrigins: string[] = ["http://localhost:8080", "http://127.0.0.1:8080"];
 const options: CorsOptions = {
   credentials: true,
+  // origin: true,
   origin: allowedOrigins,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
 };
@@ -32,6 +33,11 @@ app.use(
     secret: process.env.SESSION_SECRET as string,
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      secure: false,  // TODO => Need to set this to true when we get an SSL cert
+      httpOnly: true,
+      sameSite: "lax" // TODO => Need to set this to none when we are in production
+    }
   })
 );
 

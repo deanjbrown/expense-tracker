@@ -1,6 +1,6 @@
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
@@ -12,7 +12,6 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import SocialLogins from "./SocialLogins";
-import { toast } from "@/hooks/use-toast";
 
 const RegisterFormSchema = z.object({
   firstName: z.string().min(2).max(50),
@@ -22,7 +21,11 @@ const RegisterFormSchema = z.object({
   repeatPassword: z.string().min(2).max(50),
 });
 
-const RegisterForm = () => {
+type RegisterFormProps = {
+  onRegister: (values: z.infer<typeof RegisterFormSchema>) => Promise<void>;
+};
+
+const RegisterForm: React.FC<RegisterFormProps> = ({ onRegister }) => {
   const registerForm = useForm<z.infer<typeof RegisterFormSchema>>({
     resolver: zodResolver(RegisterFormSchema),
     defaultValues: {
@@ -34,23 +37,11 @@ const RegisterForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof RegisterFormSchema>) {
-    console.log(values);
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
-        </pre>
-      ),
-    });
-  }
-
   return (
     <>
       <Form {...registerForm}>
         <form
-          onSubmit={registerForm.handleSubmit(onSubmit)}
+          onSubmit={registerForm.handleSubmit(onRegister)}
           className="space-y-6"
         >
           <FormField
@@ -146,7 +137,9 @@ const RegisterForm = () => {
             )}
           />
 
-          <Button type="submit" className="w-full">Register</Button>
+          <Button type="submit" className="w-full">
+            Register
+          </Button>
         </form>
       </Form>
 
