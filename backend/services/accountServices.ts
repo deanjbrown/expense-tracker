@@ -182,7 +182,7 @@ export const verifyEmailService = async (
       return true;
     } else {
       throw new Error(
-        `Unexpected mode. Expected: "verify" but received: ${codeToVerify.mode}`
+        `Unexpected mode. Expected: "verify", but received: ${codeToVerify.mode}`
       );
     }
   } catch (error) {

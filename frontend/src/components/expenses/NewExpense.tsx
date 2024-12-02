@@ -29,17 +29,19 @@ import {
 } from "@/components/ui/popover";
 
 import { useState } from "react";
+import { ExpenseCreateZodSchema } from "@/types/Expense/Expense";
 
 interface NewExpenseProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (newExpense: Expense) => void;
+  onSave: (newExpense: ExpenseCreateZodSchema) => void;
 }
 
 function NewExpense(props: NewExpenseProps) {
   const [expenseName, setExpenseName] = useState<string>("");
   const [expenseAmount, setExpenseAmount] = useState<number>(0);
   const [expenseFrequency, setExpenseFrequency] = useState<string>("");
+  const [expenseXDays, setExpenseXDays] = useState<number>(30); // Default to every 30 days
   const [expenseStartDate, setExpenseStartDate] = useState<Date>();
 
   // Called when the dialog is closed
@@ -54,11 +56,11 @@ function NewExpense(props: NewExpenseProps) {
     // If there is no date set, set today's date
     const expenseDate: Date = expenseStartDate ?? new Date();
 
-    const newExpense: Expense = {
-      id: Math.random(),
+    const newExpense: ExpenseCreateZodSchema = {
       expenseName: expenseName,
       expenseAmount: expenseAmount,
       expenseFrequency: expenseFrequency,
+      expenseXDays: expenseXDays,
       expenseDate: expenseDate,
     };
     handleClose();
@@ -134,6 +136,33 @@ function NewExpense(props: NewExpenseProps) {
                 </SelectContent>
               </Select>
             </div>
+
+            {/* 
+            
+              Expense X days should only appear if frequency is set to everyxdays
+              We're going to have to default this too!!!!
+            
+            */}
+
+            {expenseFrequency === "everyxdays" && (
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="expenseXDays" className="text-right">
+                  Every X Days
+                </Label>
+                <Input
+                  type="number"
+                  id="expenseXDays"
+                  name="expenseXDays"
+                  value={expenseXDays}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setExpenseXDays(Number(e.target.value))
+                  }
+                  className="col-span-3 bg-gray-300"
+                  placeholder="Every how many days?"
+                  required
+                />
+              </div>
+            )}
 
             <div className="grid grid-cols-4 items-center gap-4">
               {/* TODO This Label isn't correctly set to the popover */}

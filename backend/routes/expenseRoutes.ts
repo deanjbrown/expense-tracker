@@ -1,7 +1,11 @@
 import { Router } from "express";
-import { expenseList } from "../controllers/expenseControllers";
+import {
+  createExpenseController,
+  expenseListController,
+} from "../controllers/expenseControllers";
 
 const expenseRoutes: Router = Router();
-expenseRoutes.get("/", expenseList);
+expenseRoutes.get("/", expenseListController);
+expenseRoutes.post("/create", createExpenseController);
 
 export default expenseRoutes;

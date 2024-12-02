@@ -22,7 +22,14 @@ const configurePassport = () => {
   passport.deserializeUser(async (id: number, done) => {
     try {
       const userRow = await db
-        .select()
+        .select({
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          isVerified: user.isVerified,
+          createdAt: user.createdAt,
+        })
         .from(user)
         .where(eq(user.id, id))
         .execute()

@@ -10,7 +10,7 @@ import {
 import { user } from "./user";
 import { InferSelectModel, relations } from "drizzle-orm";
 import { z } from "zod";
-import { createInsertSchema } from "drizzle-zod";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 // Define the enum for expenseFrequency
 export const expenseFrequencyEnum = pgEnum("expense_frequency_enum", [
@@ -52,7 +52,6 @@ export const expenseRelations = relations(expense, ({ one }) => ({
 }));
 
 // Create a z.enum based on the frequency options
-// TODO We should probably extract this array to a separate variable
 const expenseFrequencyEnumSchema = z.enum([
   "single",
   "daily",
@@ -80,8 +79,18 @@ export const expenseBaseSchema = createInsertSchema(expense, {
   expenseDate: true,
 });
 
+// Select expense schema
+const expenseBaseSelectSchema = createSelectSchema(expense).pick({
+  createdById: true,
+  expenseName: true,
+  expenseAmount: true,
+  expenseFrequency: true,
+  expenseXDays: true,
+  expenseDate: true,
+});
+
 // Expense schema can have 2 validation modes (Create and Edit)
-export const expenseZodSchema = z.union([
+export const expenseSchema = z.union([
   z.object({
     mode: z.literal("create"),
     createdById: expenseBaseSchema.shape.createdById,
@@ -103,5 +112,6 @@ export const expenseZodSchema = z.union([
   }),
 ]);
 
-export type ExpenseZodSchema = z.infer<typeof expenseZodSchema>;
+export type ExpenseZodSchema = z.infer<typeof expenseSchema>;
 export type SelectExpenseModel = InferSelectModel<typeof expense>;
+export type ExpenseZodSelectSchema = z.infer<typeof expenseBaseSelectSchema>;

@@ -13,18 +13,18 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import SocialLogins from "./SocialLogins";
 
-const LoginFormSchema = z.object({
+const loginFormSchema = z.object({
   email: z.string().min(2).max(50),
   password: z.string().min(2).max(50),
 });
 
 type LoginFormProps = {
-  onLogin: (values: z.infer<typeof LoginFormSchema>) => Promise<void>;
+  onLogin: (values: z.infer<typeof loginFormSchema>) => Promise<void>;
 };
 
 const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
-  const loginForm = useForm<z.infer<typeof LoginFormSchema>>({
-    resolver: zodResolver(LoginFormSchema),
+  const loginForm = useForm<z.infer<typeof loginFormSchema>>({
+    resolver: zodResolver(loginFormSchema),
     defaultValues: {
       email: "",
       password: "",

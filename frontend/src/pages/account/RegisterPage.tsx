@@ -8,7 +8,6 @@ import { toast } from "@/hooks/use-toast";
 
 
 // TODO => Would be nice if we could get the form to scroll without the image scrolling
-
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
 

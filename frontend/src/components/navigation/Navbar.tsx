@@ -10,17 +10,46 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Menu, User } from "lucide-react";
+import { AxiosError, AxiosResponse } from "axios";
+import { logout } from "@/api/auth";
+import { useNavigate } from "react-router-dom";
 
 interface NavbarProps {
   handleNewExpenseClicked: () => void;
 }
 
 const Navbar = (props: NavbarProps) => {
+  const navigate = useNavigate();
   const [isMobileMenuVisible, setIsMobileMenuVisible] =
     useState<boolean>(false);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuVisible(!isMobileMenuVisible);
+  };
+
+  const onLogout = async () => {
+    try {
+      const response: AxiosResponse = await logout();
+      if (response.status >= 200 && response.status < 300) {
+        console.log("[-] You have been logged out successfully");
+      }
+      navigate("/account/login");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response) {
+          console.error(
+            `[-] Server Error: ${JSON.stringify(error.response.data)}`
+          );
+        } else {
+          console.error(
+            `[-] No response received from server: ${error.request}`
+          );
+        }
+      } else {
+        console.error(`[-] An unexpected error occurred: ${error}`);
+      }
+      
+    }
   };
 
   return (
@@ -59,7 +88,7 @@ const Navbar = (props: NavbarProps) => {
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Logout</DropdownMenuItem>
+                <DropdownMenuItem onClick={onLogout}>Logout</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

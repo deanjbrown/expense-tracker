@@ -1,23 +1,22 @@
 import { DateRange } from "react-day-picker";
 import DatePickerWithRange from "../uiComponents/DatePickerWithRange";
 import ExpenseList from "./ExpenseList";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { addDays } from "date-fns";
+import { ExpenseZodSchema } from "@/types/Expense/Expense";
 
 interface ExpensesProps {
-  expenses: Expense[];
+  expenses: ExpenseZodSchema[];
 }
 
 function Expenses(props: ExpensesProps) {
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
-
-  // const [dateRange, setDateRange] = useState<DateRange | undefined>({
-  //   from: addDays(new Date(), -7),
-  //   to: new Date(),
-  // });
-
-  const [filteredExpenses, setFilteredExpenses] = useState<Expense[]>(
+  const [filteredExpenses, setFilteredExpenses] = useState<ExpenseZodSchema[]>(
     props.expenses
+  );
+
+  console.log(
+    `[+] Expenses.tsx - expenses:\n${JSON.stringify(props.expenses)}`
   );
 
   const filterExpenses = useCallback(() => {
@@ -28,12 +27,19 @@ function Expenses(props: ExpensesProps) {
     console.log(`dateTo: ${dateTo}`);
 
     // Filter the expenses between the date range
-    const filtered: Expense[] = props.expenses.filter((expense: Expense) => {
-      return expense.expenseDate >= dateFrom && expense.expenseDate <= dateTo;
-    });
+    const filtered: ExpenseZodSchema[] = props.expenses.filter(
+      (expense: ExpenseZodSchema) => {
+        return expense.expenseDate >= dateFrom && expense.expenseDate <= dateTo;
+      }
+    );
 
     setFilteredExpenses(filtered);
   }, [dateRange, props.expenses]);
+
+  // Automatically filter when `expenses` or `dateRange` changes
+  useEffect(() => {
+    filterExpenses();
+  }, [props.expenses, dateRange, filterExpenses]);
 
   return (
     <>
