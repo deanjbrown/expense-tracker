@@ -1,5 +1,6 @@
 services:
   nodeserver:
+    container_name: nodeserver_container
     restart: always
     build:
       context: ./backend
@@ -15,30 +16,19 @@ services:
         - action: rebuild
           path: package.json
     env_file: ./backend/.env
-    environment:
-      - PORT
-      - DB_HOST
-      - DB_USER
-      - DB_PASSWORD
-      - DB_NAME
-      - DATABASE_URL
 
   db:
+    image: postgres:alpine
+    container_name: db_container
     restart: always
-    build:
-      context: ./database
+    env_file: ./database/.env
     ports:
       - "5432:5432"
-    env_file:
-      - ./database/.env
-    environment:
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-      - POSTGRES_DB
     volumes:
       - db-data:/var/lib/postgresql/data
 
   reactserver:
+    container_name: reactserver_container
     restart: always
     build:
       context: ./frontend
@@ -55,6 +45,7 @@ services:
           path: package.json
 
   nginxreverseproxy:
+    container_name: nginx_container
     restart: always
     build:
       context: ./nginx
